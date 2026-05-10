@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ShoppingCart, User, Menu, X, Search, LogOut, Settings, Heart } from 'lucide-react';
 import { useCart } from '@/hooks/use-cart';
 import { useWishlist } from '@/hooks/use-wishlist';
@@ -21,11 +21,13 @@ import {
 } from './ui/sheet';
 import { Badge } from './ui/badge';
 import { cn } from '../lib/utils';
+import { jtoast } from './ui/jtoast';
 
 export function Navbar() {
   const { totalItems } = useCart();
   const { totalWishlistItems } = useWishlist();
   const location = useLocation();
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
 
   React.useEffect(() => {
@@ -118,7 +120,14 @@ export function Navbar() {
               <Link to="/login"><DropdownMenuItem>Login</DropdownMenuItem></Link>
               <Link to="/signup"><DropdownMenuItem>Sign Up</DropdownMenuItem></Link>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive">
+              <DropdownMenuItem
+                className="text-destructive"
+                onSelect={(event) => {
+                  event.preventDefault();
+                  jtoast.userLogout();
+                  navigate('/login');
+                }}
+              >
                 <LogOut className="mr-2 h-4 w-4" />
                 Logout
               </DropdownMenuItem>

@@ -7,6 +7,7 @@ import { ArrowRight, CreditCard, Truck, ShieldCheck, MapPin, ChevronLeft, CheckC
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Separator } from '../components/ui/separator';
+import { jtoast } from '../components/ui/jtoast';
 
 export default function Checkout() {
   const { items, totalPrice, clearCart } = useCart();
@@ -15,6 +16,7 @@ export default function Checkout() {
 
   const handlePlaceOrder = () => {
     setStep(3);
+    jtoast.orderPlaced();
     setTimeout(() => {
       clearCart();
     }, 100);

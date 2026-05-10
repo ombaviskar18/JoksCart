@@ -11,6 +11,8 @@ import { ShoppingBag, ArrowRight, Heart, Filter, ChevronRight, Star } from 'luci
 import { Badge } from '../components/ui/badge';
 import { Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
+import heroVideo from '../assets/hero.mp4';
+import { jtoast } from '../components/ui/jtoast';
 
 const SAMPLE_PRODUCTS: Product[] = [
   {
@@ -85,18 +87,36 @@ export default function Index() {
     ? SAMPLE_PRODUCTS
     : SAMPLE_PRODUCTS.filter(p => p.category === activeCategory);
 
+  const handleAddToCart = (product: Product) => {
+    addItem(product);
+    jtoast.productAdded(product.name);
+  };
+
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden pt-16">
-        <div className="absolute inset-0 z-0 bg-gradient-to-b from-background via-background/95 to-background pointer-events-none" />
+      <section className="relative min-h-screen flex items-center overflow-hidden pt-16">
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          <video
+            className="h-full w-full object-cover scale-105 opacity-70"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+          >
+            <source src={heroVideo} type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-background/78 via-background/35 to-background/82" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/58 via-transparent to-background/58" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_45%,hsl(var(--background))_78%)]" />
+        </div>
         <div className="container mx-auto px-4 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <Badge variant="secondary" className="mb-4 py-1 px-4 text-sm font-medium tracking-wide">NEW ARRIVALS 2026</Badge>
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-black leading-[1.1] mb-6 tracking-tight">
               STEP INTO <br />
               <span className="text-muted-foreground italic">FUTURE</span>
@@ -105,12 +125,9 @@ export default function Index() {
               Explore our new generation of performance footwear. Designed for those who never stop moving.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Button size="lg" className="rounded-full h-14 px-8 text-lg font-bold">
-                Shop Collection <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button size="lg" variant="outline" className="rounded-full h-14 px-8 text-lg font-bold border-muted-foreground/20">
-                View Gallery
-              </Button>
+              <Link to="/shop"> <Button size="lg" className="rounded-full h-10 px-5 text-md font-bold">
+                Shop Now <ArrowRight className="ml-2 h-5 w-5" />
+              </Button> </Link>
             </div>
           </motion.div>
 
@@ -120,7 +137,7 @@ export default function Index() {
             transition={{ duration: 1, delay: 0.2 }}
             className="relative"
           >
-            <Shoe3D />
+            {/* <Shoe3D /> */}
            
           </motion.div>
         </div>
@@ -206,7 +223,7 @@ export default function Index() {
                       </Button>
                       <Button variant="secondary" size="icon" className="rounded-full shadow-xl" onClick={(e) => {
                         e.preventDefault();
-                        addItem(product);
+                        handleAddToCart(product);
                       }}>
                         <ShoppingBag className="h-5 w-5" />
                       </Button>
@@ -230,7 +247,7 @@ export default function Index() {
                   <CardFooter className="p-6 pt-0">
                     <Button 
                       className="w-full font-bold group-hover:bg-primary/90" 
-                      onClick={() => addItem(product)}
+                      onClick={() => handleAddToCart(product)}
                     >
                       ADD TO CART
                     </Button>
